@@ -3,6 +3,7 @@ package com.Web.User.Controller;
 import com.Web.User.entity.User;
 import com.Web.User.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,8 +17,8 @@ public class UserController {
     UserService userService;
 
     @PostMapping
-    public User createUser(@RequestBody User user){
-        return userService.createUser(user);
+    public ResponseEntity<User> createUser(@RequestBody User user){
+        return new ResponseEntity<>(userService.createUser(user), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
@@ -27,8 +28,10 @@ public class UserController {
     }
     @GetMapping("/n/{email}")
     public ResponseEntity<List<User>> getUserByEmail(@PathVariable String email){
-        return userService.getUserByEmail(email).map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        if(userService.getUserByEmail(email).get().size()==0){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(userService.getUserByEmail(email).get(),HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
