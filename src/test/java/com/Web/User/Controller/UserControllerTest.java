@@ -87,20 +87,24 @@ class UserControllerTest {
 
     @Test
     void getUserByEmail() throws Exception {
-        User user = new User();
-        user.setId(1L);
-        user.setName("vyas");
-        user.setEmail("vyas@outlook.com");
-        User user1 = new User();
-        user.setId(1L);
-        user.setName("khnat");
-        user.setEmail("vyas@outlook.com");
+//        User user = new User();
+//        user.setId(11L);
+//        user.setName("vyas");
+//        user.setEmail("vyas@outlook.com");
+//        User user1 = new User();
+//        user1.setId(22L);
+//        user1.setName("khnat");
+//        user1.setEmail("vyas@outlook.com");
+//
+//        List<User> users = new ArrayList<>();
+//        users.add(user1);
+//        users.add(user);
+        List<User> users = Arrays.asList(
+                new User( "vyas",1L, "alice@example.com"),
+                new User( "vyas",2L, "bob@example.com")
+        );
 
-        List<User> users = new ArrayList<>();
-        users.add(user1);
-        users.add(user);
-
-        when(userService.getUserByEmail(any())).thenReturn(Optional.of(users));
+        when(userService.getUserByEmail("vyas@outlook.com")).thenReturn(Optional.of(users));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/users/n/{email}","vyas@outlook.com")
                 ).andExpect(MockMvcResultMatchers.status().isOk())
